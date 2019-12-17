@@ -1,0 +1,44 @@
+@CHARSET "ISO-8859-1";
+
+.teamPhoenix {
+	background-image: url(../images/phoenix.png);
+	background-size: cover;
+	width: 100%;
+	height: 100vh;
+}
+
+.nopadding {
+	padding-top: 0px;
+	padding-right: 0px;
+	padding-bottom: 0px;
+	padding-left: 0px;
+}
+
+.nomargin {
+	margin-top: 0px;
+	margin-bottom: 0px;
+	margin-right: 0px;
+	margin-left: 0px;
+}
+
+.money {
+	text-align: right;
+}
+
+.forecast {
+	overflow-y: scroll;
+	height: 80vh;
+}
+
+.investmentLabel {
+	font-weight: bold;
+}
+
+.bottomBorder {
+	border-bottom: 1px solid;
+	clear: both;
+}
+
+.darkBackground {
+	background-color: white;
+}
