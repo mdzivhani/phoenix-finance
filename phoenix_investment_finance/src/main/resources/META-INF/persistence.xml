@@ -20,6 +20,7 @@
 		<!-- The datasource is deployed as WEB-INF/phoenix_investment_finance-ds.xml, 
 			you can find it in the source at src/main/webapp/WEB-INF/phoenix_investment_finance-ds.xml -->
 		<jta-data-source>java:/PhoenixDS</jta-data-source>
+		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />
