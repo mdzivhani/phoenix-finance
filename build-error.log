@@ -1,0 +1,77 @@
+#1 [internal] load local bake definitions
+#1 reading from stdin 559B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 2.07kB 0.0s done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/jboss/wildfly:latest
+#3 DONE 0.4s
+
+#4 [internal] load metadata for docker.io/library/maven:3.9.6-eclipse-temurin-11
+#4 DONE 0.4s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 2B done
+#5 DONE 0.0s
+
+#6 [build 1/7] FROM docker.io/library/maven:3.9.6-eclipse-temurin-11@sha256:b3573fcc754a04d96c00a4bb932a5c723493ebbb3d5676e0adaa59d386a5448c
+#6 DONE 0.0s
+
+#7 [stage-1 1/7] FROM docker.io/jboss/wildfly:latest@sha256:35320abafdec6d360559b411aff466514d5741c3c527221445f48246350fdfe5
+#7 DONE 0.0s
+
+#8 [internal] load build context
+#8 transferring context: 12.67kB 0.0s done
+#8 DONE 0.0s
+
+#9 [stage-1 3/7] ADD https://repo1.maven.org/maven2/org/postgresql/postgresql/42.7.5/postgresql-42.7.5.jar /opt/jboss/wildfly/modules/system/layers/base/org/postgresql/main/postgresql-42.7.5.jar
+#9 DONE 0.1s
+
+#10 [build 4/7] RUN mvn -f phoenix_investment_finance/pom.xml -DskipTests -DskipWildFlyDeploy=true dependency:resolve dependency:resolve-plugins
+#10 CACHED
+
+#11 [build 5/7] COPY phoenix_investment_finance/src phoenix_investment_finance/src
+#11 CACHED
+
+#12 [build 3/7] COPY phoenix_investment_finance/pom.xml phoenix_investment_finance/pom.xml
+#12 CACHED
+
+#13 [build 2/7] WORKDIR /build
+#13 CACHED
+
+#14 [build 6/7] COPY wildfly-module wildfly-module
+#14 CACHED
+
+#15 [stage-1 2/7] RUN mkdir -p /opt/jboss/wildfly/modules/system/layers/base/org/postgresql/main
+#15 CACHED
+
+#16 [stage-1 5/7] COPY scripts/register-driver.cli /tmp/register-driver.cli
+#16 CACHED
+
+#17 [stage-1 4/7] COPY wildfly-module/org/postgresql/main/module.xml /opt/jboss/wildfly/modules/system/layers/base/org/postgresql/main/module.xml
+#17 CACHED
+
+#18 [stage-1 3/7] ADD https://repo1.maven.org/maven2/org/postgresql/postgresql/42.7.5/postgresql-42.7.5.jar /opt/jboss/wildfly/modules/system/layers/base/org/postgresql/main/postgresql-42.7.5.jar
+#18 CACHED
+
+#19 [build 7/7] RUN mvn -f phoenix_investment_finance/pom.xml -DskipTests -DskipWildFlyDeploy=true clean package
+#19 CACHED
+
+#20 [stage-1 6/7] RUN /opt/jboss/wildfly/bin/jboss-cli.sh --file=/tmp/register-driver.cli
+#20 CACHED
+
+#21 [stage-1 7/7] COPY --from=build /build/phoenix_investment_finance/target/phoenix_investment_finance.war /opt/jboss/wildfly/standalone/deployments/phoenix_investment_finance.war
+#21 DONE 0.1s
+
+#22 exporting to image
+#22 exporting layers
+#22 exporting layers 0.2s done
+#22 writing image sha256:c30bc55ce988c29d75d7ff57d3c5f71cf10164f810962bd38aaf3dcbe2afe823 done
+#22 naming to docker.io/library/phoenix-finance:latest 0.0s done
+#22 DONE 0.3s
+
+#23 resolving provenance for metadata file
+#23 DONE 0.0s
+ phoenix-finance:latest  Built

@@ -15,19 +15,10 @@
         http://xmlns.jcp.org/xml/ns/persistence
         http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
 	<persistence-unit name="phoenixPersistence">
-		<!-- If you are running in a production environment, add a managed data 
-			source, this example data source is just for development and testing! -->
-		<!-- The datasource is deployed as WEB-INF/phoenix_investment_finance-ds.xml, 
-			you can find it in the source at src/main/webapp/WEB-INF/phoenix_investment_finance-ds.xml -->
-		<jta-data-source>java:/PhoenixDS</jta-data-source>
-
+		<!-- Using managed JTA datasource (configured in phoenix_investment_finance-ds.xml) -->
+		<jta-data-source>java:jboss/datasources/PhoenixDS</jta-data-source>
 		<properties>
-			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />
-			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/phoenixdb" />
-			<property name="javax.persistence.jdbc.user" value="postgres" />
-			<property name="javax.persistence.jdbc.password" value="" />
-
-			<!-- Properties for Hibernate -->
+			<!-- Hibernate schema management; change to 'validate' or 'none' in production -->
 			<property name="hibernate.hbm2ddl.auto" value="update"/>
 			<property name="hibernate.show_sql" value="false" />
 		</properties>

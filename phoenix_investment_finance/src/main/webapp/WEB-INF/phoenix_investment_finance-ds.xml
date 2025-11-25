@@ -21,17 +21,24 @@
 <datasources xmlns="http://www.jboss.org/ironjacamar/schema"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.jboss.org/ironjacamar/schema http://docs.jboss.org/ironjacamar/schema/datasources_1_0.xsd">
-    <!-- The datasource is bound into JNDI at this location. We reference 
-        this in META-INF/persistence.xml -->
-    <datasource jndi-name="java:jboss/datasources/phoenix_investment_financeDS"
-        pool-name="phoenix_investment_finance" enabled="true"
-        use-java-context="true">
-        <connection-url>jdbc:h2:mem:phoenix_investment_finance;DB_CLOSE_ON_EXIT=FALSE;DB_CLOSE_DELAY=-1</connection-url>
-        <driver>h2</driver>
+    <!-- PostgreSQL managed datasource; values resolved from environment variables passed to container.
+         Example docker-compose env: POSTGRES_HOST, POSTGRES_PORT, POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD -->
+    <datasource jndi-name="java:jboss/datasources/PhoenixDS"
+        pool-name="PhoenixDSPool" enabled="true" use-java-context="true">
+        <connection-url>jdbc:postgresql://${env.POSTGRES_HOST:postgres}:${env.POSTGRES_PORT:5432}/${env.POSTGRES_DB:phoenixdb}</connection-url>
+        <driver>postgresql</driver>
         <security>
-            <user-name>sa</user-name>
-            <password>sa</password>
+            <user-name>${env.POSTGRES_USER:postgres}</user-name>
+            <password>${env.POSTGRES_PASSWORD:postgres}</password>
         </security>
+        <validation>
+            <check-valid-connection-sql>SELECT 1</check-valid-connection-sql>
+            <background-validation>true</background-validation>
+            <background-validation-millis>30000</background-validation-millis>
+        </validation>
+        <timeout>
+            <idle-timeout-minutes>5</idle-timeout-minutes>
+        </timeout>
     </datasource>
 </datasources>
  
