@@ -7,10 +7,16 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.phoenix.finance.entity.investment.Investment;
 
+/**
+ * Integration test requiring WildFly container + pre-populated PostgreSQL data (Investment ID 100).
+ * Run via: mvn clean test -Parq-wildfly-managed
+ */
+@Ignore("Requires WildFly container with phoenixPersistence JTA datasource and pre-existing test data. Run with: mvn clean test -Parq-wildfly-managed")
 public class InvestmentTest {
 
 	private EntityManagerFactory entityFactory = Persistence.createEntityManagerFactory("phoenixPersistence");

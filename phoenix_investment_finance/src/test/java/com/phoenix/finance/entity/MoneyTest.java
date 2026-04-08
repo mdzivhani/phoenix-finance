@@ -14,16 +14,16 @@ public class MoneyTest {
 	public void testAddWorks() {
 		Money money = new Money(0);
 
-		money.add(new Money(1000));
-		money.add(new Money(1000));
-		assertEquals(BigDecimal.valueOf(2000), money.getValue());
+		money = money.add(new Money(1000));
+		money = money.add(new Money(1000));
+		assertEquals(new BigDecimal("2000.00"), money.getValue());
 	}
 	
 	@Test
 	public void testSubtractWorks() {
 		Money money = new Money(2000);
 		
-		money.subtract(new Money(1000));
-		assertEquals(BigDecimal.valueOf(1000), money.getValue());
+		money = money.subtract(new Money(1000));
+		assertEquals(new BigDecimal("1000.00"), money.getValue());
 	}
 }
