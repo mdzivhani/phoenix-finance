@@ -60,9 +60,9 @@
 		<skipWildFlyDeploy>false</skipWildFlyDeploy>
 
 		<!-- maven-compiler-plugin -->
-		<maven.compiler.target>11</maven.compiler.target>
-		<maven.compiler.source>11</maven.compiler.source>
-		<maven.compiler.release>11</maven.compiler.release>
+		<maven.compiler.target>25</maven.compiler.target>
+		<maven.compiler.source>25</maven.compiler.source>
+		<maven.compiler.release>25</maven.compiler.release>
 	</properties>
 
 
@@ -206,6 +206,10 @@
 			given to the generated war, and hence the context root) -->
 		<finalName>${project.artifactId}</finalName>
 		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${version.compiler.plugin}</version>
+			</plugin>
 			<plugin>
 				<artifactId>maven-war-plugin</artifactId>
 				<version>${version.war.plugin}</version>
