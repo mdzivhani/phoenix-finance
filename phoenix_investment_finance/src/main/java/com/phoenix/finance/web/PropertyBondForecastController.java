@@ -23,7 +23,7 @@ import com.phoenix.finance.util.ComplexPropertyBondUtil;
 
 @Controller
 @ApplicationScoped
-public class PropertyBondForecastController implements com.phoenix.finance.web.Controller {
+public class PropertyBondForecastController {
 
 	@Inject
 	private PropertyBondForecastService bondForecastService;
@@ -38,14 +38,13 @@ public class PropertyBondForecastController implements com.phoenix.finance.web.C
 			bondForecastService.generateForecast(bondForecast);
 			req.setAttribute("bondForecast", bondForecast);
 
-			RequestDispatcher requestDispatcher = req.getRequestDispatcher(Controller.JSP_PATH + "propertyBondForecast.jsp");
+			RequestDispatcher requestDispatcher = req.getRequestDispatcher("/WEB-INF/view/propertyBondForecast.jsp");
 			requestDispatcher.forward(req, resp);
 		} catch (ServletException | IOException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	@Override
 	public PropertyBondForecast getModel(HttpServletRequest req) {
 		if (isFirstTime(req)) {
 			Money principal = new Money(new BigDecimal(req.getParameter("principal")));

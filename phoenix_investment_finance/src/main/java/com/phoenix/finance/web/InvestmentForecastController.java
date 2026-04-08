@@ -22,7 +22,7 @@ import com.phoenix.finance.service.InvestmentForecastService;
 
 @Controller
 @ApplicationScoped
-public class InvestmentForecastController implements com.phoenix.finance.web.Controller {
+public class InvestmentForecastController {
 
 	@Inject
 	private InvestmentForecastService forecastService;
@@ -32,7 +32,7 @@ public class InvestmentForecastController implements com.phoenix.finance.web.Con
 			InvestmentForecast forecast = getModel(req);
 			forecastService.generateForecast(forecast);
 
-			RequestDispatcher requestDispatcher = req.getRequestDispatcher(Controller.JSP_PATH + "investmentForecast.jsp");
+			RequestDispatcher requestDispatcher = req.getRequestDispatcher("/WEB-INF/view/investmentForecast.jsp");
 			requestDispatcher.forward(req, resp);
 		} catch (ServletException | IOException e) {
 			throw new RuntimeException(e);
@@ -52,7 +52,6 @@ public class InvestmentForecastController implements com.phoenix.finance.web.Con
 		}
 	}
 
-	@Override
 	public InvestmentForecast getModel(HttpServletRequest req) {
 		InvestmentForecast forecast = (InvestmentForecast) req.getSession().getAttribute("forecast");
 		if (forecast == null) {

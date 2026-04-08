@@ -18,7 +18,7 @@ import com.phoenix.finance.service.PropertyBondService;
 
 @Controller
 @ApplicationScoped
-public class PropertyBondController implements com.phoenix.finance.web.Controller {
+public class PropertyBondController {
 
 	@Inject
 	private PropertyBondService bondService;
@@ -62,7 +62,6 @@ public class PropertyBondController implements com.phoenix.finance.web.Controlle
 		}
 	}
 
-	@Override
 	public PropertyBond getModel(HttpServletRequest req) {
 		PropertyBondForecast propertyBondForecast = (PropertyBondForecast) req.getSession().getAttribute("bondForecast");
 		return propertyBondForecast.getBond();

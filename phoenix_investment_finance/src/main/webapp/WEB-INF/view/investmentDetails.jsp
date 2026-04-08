@@ -1,5 +1,4 @@
 <%@page import="com.phoenix.finance.util.MoneyFormatter"%>
-<%@page import="com.phoenix.finance.web.Controller"%>
 <%@page contentType="text/html; charset=ISO-8859-1"
 	import="java.util.List, java.math.BigDecimal"%>
 <%@page import="com.phoenix.finance.entity.investment.*"%>

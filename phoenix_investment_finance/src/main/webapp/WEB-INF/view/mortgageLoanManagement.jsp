@@ -1,0 +1,244 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="f" uri="http://xmlns.jcp.org/jsf/core"%>
+<%@ taglib prefix="h" uri="http://xmlns.jcp.org/jsf/html"%>
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Mortgage Loan Management</title>
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style.css">
+	<style>
+		.loan-card {
+			border-left: 4px solid #007bff;
+			margin-bottom: 15px;
+			padding: 15px;
+			background-color: #f8f9fa;
+			border-radius: 5px;
+		}
+		.loan-status-active {
+			color: #28a745;
+			font-weight: bold;
+		}
+		.loan-status-completed {
+			color: #6c757d;
+			font-weight: bold;
+		}
+		.loan-details-table {
+			font-size: 14px;
+		}
+		.page-header {
+			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			color: white;
+			padding: 30px 0;
+			margin-bottom: 30px;
+			border-radius: 5px;
+		}
+	</style>
+</head>
+<body>
+	<f:view>
+		<div class="container-fluid mt-5">
+			<div class="page-header">
+				<div class="container">
+					<h1 class="mb-0">Mortgage Loan Management</h1>
+					<p class="lead mb-0">Manage and track your mortgage loans</p>
+				</div>
+			</div>
+
+			<div class="container">
+				<!-- Navigation Tabs -->
+				<ul class="nav nav-tabs mb-4" role="tablist">
+					<li class="nav-item">
+						<a class="nav-link active" data-toggle="tab" href="#viewLoans" role="tab">View Loans</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" data-toggle="tab" href="#searchLoan" role="tab">Search by Account</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" data-toggle="tab" href="#addLoan" role="tab">Add New Loan</a>
+					</li>
+				</ul>
+
+				<!-- Tab Content -->
+				<div class="tab-content">
+					<!-- View Loans Tab -->
+					<div class="tab-pane fade show active" id="viewLoans" role="tabpanel">
+						<h:form>
+							<div class="row mb-4">
+								<div class="col-md-6">
+									<h3>Investor Selection</h3>
+									<div class="form-group">
+										<h:outputLabel for="investorNum">Select Investor:</h:outputLabel>
+										<h:inputText id="investorNum" value="#{mortgageLoanController.selectedInvestorNum}"
+											styleClass="form-control" placeholder="Enter Investor Number" />
+									</div>
+									<h:commandButton value="Load Loans" action="#{mortgageLoanController.loadInvestorLoans()}"
+										styleClass="btn btn-primary" />
+								</div>
+								<div class="col-md-6">
+									<h3>Investor Details</h3>
+									<h:panelGroup rendered="#{mortgageLoanController.selectedInvestor != null}">
+										<p><strong>Name:</strong> #{mortgageLoanController.selectedInvestor.firstName} #{mortgageLoanController.selectedInvestor.lastName}</p>
+										<p><strong>Email:</strong> #{mortgageLoanController.selectedInvestor.email}</p>
+										<p><strong>Phone:</strong> #{mortgageLoanController.selectedInvestor.cellphone}</p>
+									</h:panelGroup>
+								</div>
+							</div>
+
+							<h3 class="mt-4 mb-3">Mortage Loans</h3>
+							<h:panelGroup rendered="#{mortgageLoanController.investorLoans != null && mortgageLoanController.investorLoans.size() > 0}">
+								<h:dataTable value="#{mortgageLoanController.investorLoans}" var="loan"
+									styleClass="table table-striped table-hover" border="1" cellpadding="10">
+									<h:column>
+										<f:facet name="header">Account Number</f:facet>
+										<h:outputText value="#{loan.accountNumber}" />
+									</h:column>
+									<h:column>
+										<f:facet name="header">Principal Amount</f:facet>
+										<h:outputText value="#{loan.principalAmount}" />
+									</h:column>
+									<h:column>
+										<f:facet name="header">Current Balance</f:facet>
+										<h:outputText value="#{loan.currentBalance}" />
+									</h:column>
+									<h:column>
+										<f:facet name="header">Interest Rate (%)</f:facet>
+										<h:outputText value="#{loan.interestRate}" />
+									</h:column>
+									<h:column>
+										<f:facet name="header">Monthly Payment</f:facet>
+										<h:outputText value="#{loan.monthlyPayment}" />
+									</h:column>
+									<h:column>
+										<f:facet name="header">Remaining Months</f:facet>
+										<h:outputText value="#{loan.remainingMonths}" />
+									</h:column>
+									<h:column>
+										<f:facet name="header">Status</f:facet>
+										<h:outputText value="#{loan.status.displayName}" />
+									</h:column>
+									<h:column>
+										<f:facet name="header">Actions</f:facet>
+										<h:commandButton value="Edit" action="#{mortgageLoanController.editLoan(loan)}"
+											styleClass="btn btn-sm btn-warning" />
+										<h:commandButton value="Delete" action="#{mortgageLoanController.deleteLoan(loan.loanId)}"
+											onclick="return confirm('Are you sure?')" styleClass="btn btn-sm btn-danger ml-2" />
+									</h:column>
+								</h:dataTable>
+							</h:panelGroup>
+							<h:panelGroup rendered="#{mortgageLoanController.investorLoans == null || mortgageLoanController.investorLoans.size() == 0}">
+								<div class="alert alert-info">No loans found for the selected investor.</div>
+							</h:panelGroup>
+						</h:form>
+					</div>
+
+					<!-- Search Loan Tab -->
+					<div class="tab-pane fade" id="searchLoan" role="tabpanel">
+						<h:form>
+							<div class="row">
+								<div class="col-md-6">
+									<h3>Search Loan by Account Number</h3>
+									<div class="form-group">
+										<h:outputLabel for="accountNumber">Account Number:</h:outputLabel>
+										<h:inputText id="accountNumber" styleClass="form-control"
+											placeholder="e.g., 80-9262-8868" />
+									</div>
+									<h:commandButton value="Search" action="#{mortgageLoanController.viewLoanByAccountNumber('')}"
+										styleClass="btn btn-primary" />
+								</div>
+							</div>
+
+							<h:panelGroup rendered="#{mortgageLoanController.currentLoan != null && mortgageLoanController.currentLoan.loanId != null}">
+								<div class="card mt-4">
+									<div class="card-header bg-primary text-white">
+										<h4 class="mb-0">Loan Details: #{mortgageLoanController.currentLoan.accountNumber}</h4>
+									</div>
+									<div class="card-body">
+										<div class="row">
+											<div class="col-md-6">
+												<p><strong>Investor:</strong> #{mortgageLoanController.currentLoan.investor.firstName} #{mortgageLoanController.currentLoan.investor.lastName}</p>
+												<p><strong>Principal Amount:</strong> R#{mortgageLoanController.currentLoan.principalAmount}</p>
+												<p><strong>Current Balance:</strong> R#{mortgageLoanController.currentLoan.currentBalance}</p>
+												<p><strong>Interest Rate:</strong> #{mortgageLoanController.currentLoan.interestRate}%</p>
+											</div>
+											<div class="col-md-6">
+												<p><strong>Monthly Payment:</strong> R#{mortgageLoanController.currentLoan.monthlyPayment}</p>
+												<p><strong>Remaining Months:</strong> #{mortgageLoanController.currentLoan.remainingMonths}</p>
+												<p><strong>Status:</strong> <span class="loan-status-active">#{mortgageLoanController.currentLoan.status.displayName}</span></p>
+												<p><strong>Issued Date:</strong> #{mortgageLoanController.currentLoan.issuedDate}</p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</h:panelGroup>
+						</h:form>
+					</div>
+
+					<!-- Add New Loan Tab -->
+					<div class="tab-pane fade" id="addLoan" role="tabpanel">
+						<h:form>
+							<div class="row">
+								<div class="col-md-8">
+									<h3>Add New Mortgage Loan</h3>
+									<div class="form-group">
+										<h:outputLabel for="newInvestorNum">Investor Number:</h:outputLabel>
+										<h:inputText id="newInvestorNum" value="#{mortgageLoanController.currentLoan.investor}"
+											styleClass="form-control" required="true" />
+									</div>
+									<div class="form-group">
+										<h:outputLabel for="accountNum">Account Number:</h:outputLabel>
+										<h:inputText id="accountNum" value="#{mortgageLoanController.currentLoan.accountNumber}"
+											styleClass="form-control" required="true"
+											placeholder="e.g., 80-9262-8868" />
+									</div>
+									<div class="form-group">
+										<h:outputLabel for="principal">Principal Amount:</h:outputLabel>
+										<h:inputText id="principal" value="#{mortgageLoanController.currentLoan.principalAmount}"
+											styleClass="form-control" required="true" type="number" />
+									</div>
+									<div class="form-group">
+										<h:outputLabel for="interestRate">Interest Rate (%):</h:outputLabel>
+										<h:inputText id="interestRate" value="#{mortgageLoanController.currentLoan.interestRate}"
+											styleClass="form-control" required="true" type="number" step="0.01" />
+									</div>
+									<div class="form-group">
+										<h:outputLabel for="issuedDate">Issued Date:</h:outputLabel>
+										<h:inputText id="issuedDate" value="#{mortgageLoanController.currentLoan.issuedDate}"
+											styleClass="form-control" required="true" type="date" />
+									</div>
+									<div class="form-group">
+										<h:outputLabel for="maturityDate">Maturity Date:</h:outputLabel>
+										<h:inputText id="maturityDate" value="#{mortgageLoanController.currentLoan.maturityDate}"
+											styleClass="form-control" required="true" type="date" />
+									</div>
+									<div class="form-group">
+										<h:outputLabel for="monthlyPayment">Monthly Payment:</h:outputLabel>
+										<h:inputText id="monthlyPayment" value="#{mortgageLoanController.currentLoan.monthlyPayment}"
+											styleClass="form-control" required="true" type="number" step="0.01" />
+									</div>
+									<div class="form-group">
+										<h:outputLabel for="remainingMonths">Remaining Months:</h:outputLabel>
+										<h:inputText id="remainingMonths" value="#{mortgageLoanController.currentLoan.remainingMonths}"
+											styleClass="form-control" required="true" type="number" />
+									</div>
+									<div class="form-group">
+										<h:commandButton value="Save Loan" action="#{mortgageLoanController.saveLoan()}"
+											styleClass="btn btn-success mr-2" />
+										<h:commandButton value="Reset" action="#{mortgageLoanController.reset()}"
+											styleClass="btn btn-secondary" immediate="true" />
+									</div>
+								</div>
+							</div>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</f:view>
+
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/bootstrap/js/bootstrap.min.js"></script>
+</body>
+</html>

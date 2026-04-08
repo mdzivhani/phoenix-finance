@@ -19,21 +19,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.phoenix.finance.web.Controller;
-
 @WebServlet(urlPatterns = "/finance/*", loadOnStartup = 1)
 @SuppressWarnings("serial")
 public class Dispatcher extends HttpServlet {
 
+	private static final String JSP_PATH = "/WEB-INF/view/";
 	private static final Map<String, Method> MAPPED_METHODS = new HashMap<String, Method>();
 
-	private static final Map<String, Controller> CONTROLLERS = new HashMap<String, Controller>();
+	private static final Map<String, Object> CONTROLLERS = new HashMap<String, Object>();
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String pathInfo = req.getPathInfo();
 		if (pathInfo.contains(".jsp")) {
-			RequestDispatcher dispatcher = req.getRequestDispatcher(Controller.JSP_PATH + pathInfo);
+			RequestDispatcher dispatcher = req.getRequestDispatcher(JSP_PATH + pathInfo);
 			dispatcher.forward(req, resp);
 		} else {
 			if (MAPPED_METHODS.containsKey(pathInfo)) {
@@ -42,13 +41,13 @@ public class Dispatcher extends HttpServlet {
 					method.invoke(CONTROLLERS.get(pathInfo.split("/")[1]), req, resp);
 				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 					req.setAttribute("message", "A techincal error has occured.");
-					RequestDispatcher dispatcher = req.getRequestDispatcher(Controller.JSP_PATH + "error.jsp");
+					RequestDispatcher dispatcher = req.getRequestDispatcher(JSP_PATH + "error.jsp");
 					dispatcher.forward(req, resp);
 					e.printStackTrace();
 				}
 			} else {
 				req.setAttribute("message", "Oops! There is no such page");
-				RequestDispatcher dispatcher = req.getRequestDispatcher(Controller.JSP_PATH + "error.jsp");
+				RequestDispatcher dispatcher = req.getRequestDispatcher(JSP_PATH + "error.jsp");
 				dispatcher.forward(req, resp);
 			}
 		}
@@ -85,7 +84,7 @@ public class Dispatcher extends HttpServlet {
 		// looping through the beans that the container created to wrap controllers
 		for (Bean<?> bean : beans) {
 			if (bean.getBeanClass().getName().equals(controllerClassName)) {
-				Controller controller = (Controller) beanManager.getReference(bean, bean.getBeanClass(),
+				Object controller = beanManager.getReference(bean, bean.getBeanClass(),
 						beanManager.createCreationalContext(bean));
 				CONTROLLERS.put(controllerKey, controller);
 			}

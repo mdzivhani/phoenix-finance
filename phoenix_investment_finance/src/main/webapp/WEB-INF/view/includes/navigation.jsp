@@ -23,6 +23,16 @@
       			View Property Bonds
       			</a>
   			</li>
+  			<li>
+      			<a href="<%=request.getContextPath()%>/WEB-INF/view/mortgageLoanManagement.jsp">
+      				Mortgage Loans
+      			</a>
+   			</li>
+   			<li>
+      			<a href="<%=request.getContextPath()%>/WEB-INF/view/mortgagePayoffAccelerator.jsp">
+      				💰 Payoff Accelerator
+      			</a>
+   			</li>
 		</ul>
 	</div>
 </nav>

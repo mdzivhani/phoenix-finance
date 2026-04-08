@@ -23,7 +23,7 @@ import com.phoenix.finance.service.InvestorService;
 
 @Controller
 @ApplicationScoped
-public class InvestorController implements com.phoenix.finance.web.Controller {
+public class InvestorController {
 
 	@Inject
 	private InvestorService investorService;
@@ -42,7 +42,6 @@ public class InvestorController implements com.phoenix.finance.web.Controller {
 		req.getServletContext().getRequestDispatcher("/finance/success.jsp").forward(req, resp);
 	}
 
-	@Override
 	public Investor getModel(HttpServletRequest req) {
 		int investorNum = generateInvestorNumber();
 		String firstname = req.getParameter("firstname");

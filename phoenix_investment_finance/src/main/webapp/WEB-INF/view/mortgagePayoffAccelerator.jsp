@@ -1,0 +1,480 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="f" uri="http://xmlns.jcp.org/jsf/core"%>
+<%@ taglib prefix="h" uri="http://xmlns.jcp.org/jsf/html"%>
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Mortgage Loan Acceleration & Payoff Calculator</title>
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style.css">
+	<style>
+		.page-header {
+			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			color: white;
+			padding: 30px 0;
+			margin-bottom: 30px;
+			border-radius: 5px;
+		}
+		.scenario-card {
+			border-left: 4px solid #007bff;
+			margin-bottom: 20px;
+			padding: 20px;
+			background-color: #f8f9fa;
+			border-radius: 5px;
+			transition: box-shadow 0.3s ease;
+		}
+		.scenario-card:hover {
+			box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+		}
+		.scenario-card.best {
+			border-left-color: #28a745;
+			background-color: #f0f8f4;
+		}
+		.scenario-title {
+			font-weight: bold;
+			font-size: 16px;
+			color: #333;
+			margin-bottom: 10px;
+		}
+		.scenario-stat {
+			font-size: 14px;
+			margin: 8px 0;
+			color: #555;
+		}
+		.stat-value {
+			font-weight: bold;
+			color: #007bff;
+		}
+		.savings-highlight {
+			color: #28a745;
+			font-weight: bold;
+		}
+		.interest-calc {
+			background-color: #fff3cd;
+			padding: 15px;
+			border-radius: 5px;
+			margin: 15px 0;
+		}
+		.payoff-timeline {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			margin: 30px 0;
+			position: relative;
+		}
+		.timeline-point {
+			flex: 1;
+			text-align: center;
+			padding: 15px;
+			background-color: #f8f9fa;
+			border-radius: 5px;
+			margin: 0 5px;
+		}
+		.timeline-point.best {
+			background-color: #d4edda;
+			border: 2px solid #28a745;
+		}
+		.comparison-table {
+			font-size: 13px;
+		}
+		.comparison-table td {
+			padding: 10px;
+		}
+		.monthly-input-group {
+			background-color: #f9f9f9;
+			padding: 15px;
+			border-radius: 5px;
+			margin-bottom: 20px;
+		}
+		.payoff-summary {
+			background: linear-gradient(135deg, #e0f2fe 0%, #f0e7ff 100%);
+			padding: 20px;
+			border-radius: 8px;
+			margin: 20px 0;
+		}
+		.btn-schedule {
+			margin-top: 10px;
+		}
+		.months-saved {
+			font-size: 24px;
+			font-weight: bold;
+			color: #28a745;
+		}
+		.interest-saved {
+			font-size: 20px;
+			color: #28a745;
+		}
+	</style>
+</head>
+<body>
+	<f:view>
+		<div class="container-fluid mt-5">
+			<div class="page-header">
+				<div class="container">
+					<h1 class="mb-0">💰 Mortgage Loan Acceleration Calculator</h1>
+					<p class="lead mb-0">Find the best strategy to pay off your mortgage faster and save money on interest</p>
+				</div>
+			</div>
+
+			<div class="container">
+				<h:form>
+					<!-- Loan Selection -->
+					<div class="card mb-4">
+						<div class="card-header bg-primary text-white">
+							<h4 class="mb-0">Step 1: Select Your Loan</h4>
+						</div>
+						<div class="card-body">
+							<div class="form-group">
+								<h:outputLabel for="loanSelect">Available Loans:</h:outputLabel>
+								<h:selectOneMenu id="loanSelect" value="#{mortgagePayoffController.selectedLoanId}" 
+									styleClass="form-control">
+									<f:selectItem itemLabel="-- Select a Loan --" itemValue="#{null}" />
+									<f:selectItems value="#{mortgagePayoffController.allLoans}" var="loan" 
+										itemLabel="#{loan.accountNumber} (R#{loan.currentBalance})" itemValue="#{loan.loanId}" />
+								</h:selectOneMenu>
+							</div>
+							<h:commandButton value="Load Loan & Calculate Payoff Scenarios" 
+								action="#{mortgagePayoffController.loadLoan()}"
+								styleClass="btn btn-primary btn-lg" />
+						</div>
+					</div>
+
+					<!-- Loan Summary (when loan is selected) -->
+					<h:panelGroup rendered="#{mortgagePayoffController.selectedLoan != null}">
+						<div class="card mb-4">
+							<div class="card-header bg-success text-white">
+								<h4 class="mb-0">Loan Summary</h4>
+							</div>
+							<div class="card-body">
+								<div class="row">
+									<div class="col-md-4">
+										<h5>Account Number</h5>
+										<p class="stat-value">#{mortgagePayoffController.selectedLoan.accountNumber}</p>
+									</div>
+									<div class="col-md-4">
+										<h5>Current Balance</h5>
+										<p class="stat-value">R#{mortgagePayoffController.selectedLoan.currentBalance}</p>
+									</div>
+									<div class="col-md-4">
+										<h5>Monthly Payment</h5>
+										<p class="stat-value">R#{mortgagePayoffController.selectedLoan.monthlyPayment}</p>
+									</div>
+								</div>
+								<div class="row mt-3">
+									<div class="col-md-4">
+										<h5>Interest Rate</h5>
+										<p class="stat-value">#{mortgagePayoffController.selectedLoan.interestRate}% p.a.</p>
+									</div>
+									<div class="col-md-4">
+										<h5>Remaining Months</h5>
+										<p class="stat-value">#{mortgagePayoffController.remainingMonths}</p>
+									</div>
+									<div class="col-md-4">
+										<h5>Standard Payoff Date</h5>
+										<p class="stat-value">#{mortgagePayoffController.standardPayoffDate}</p>
+									</div>
+								</div>
+
+								<div class="interest-calc">
+									<h5>Current Payment Breakdown</h5>
+									<div class="row">
+										<div class="col-md-3">
+											<strong>Monthly Payment:</strong> R#{mortgagePayoffController.selectedLoan.monthlyPayment}
+										</div>
+										<div class="col-md-3">
+											<strong>Principal:</strong> R#{mortgagePayoffController.currentMonthlyPrincipal}
+										</div>
+										<div class="col-md-3">
+											<strong>Interest:</strong> R#{mortgagePayoffController.currentMonthlyInterest}
+										</div>
+										<div class="col-md-3">
+											<strong>Total Interest (Remaining):</strong> R#{mortgagePayoffController.totalRemainingInterest}
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- Payoff Scenarios -->
+						<div class="card mb-4">
+							<div class="card-header bg-info text-white">
+								<h4 class="mb-0">Step 2: Payoff Acceleration Scenarios</h4>
+							</div>
+							<div class="card-body">
+
+								<!-- Standard Payment -->
+								<div class="scenario-card">
+									<div class="scenario-title">📊 Standard Payment (No Extra Payment)</div>
+									<h:panelGroup rendered="#{mortgagePayoffController.standardPaymentScenario != null}">
+										<div class="scenario-stat">
+											<strong>Remaining Term:</strong> 
+											<span class="stat-value">#{mortgagePayoffController.standardPaymentScenario.monthsToPayoff} months 
+												(#{mortgagePayoffController.standardPaymentScenario.monthsToPayoff / 12} years)</span>
+										</div>
+										<div class="scenario-stat">
+											<strong>Payoff Date:</strong> 
+											<span class="stat-value">#{mortgagePayoffController.standardPaymentScenario.payoffDate}</span>
+										</div>
+										<div class="scenario-stat">
+											<strong>Total Interest to Pay:</strong> 
+											<span class="stat-value">R#{mortgagePayoffController.standardPaymentScenario.totalInterestPaid}</span>
+										</div>
+										<div class="scenario-stat">
+											<strong>Total Amount to Pay:</strong> 
+											<span class="stat-value">R#{mortgagePayoffController.standardPaymentScenario.totalAmountPaid}</span>
+										</div>
+										<h:commandButton value="View Payment Schedule" 
+											action="#{mortgagePayoffController.showPaymentSchedule(mortgagePayoffController.standardPaymentScenario)}"
+											styleClass="btn btn-sm btn-secondary btn-schedule" immediate="true" />
+									</h:panelGroup>
+								</div>
+
+								<!-- Accelerated (Extra Month Per Year) -->
+								<div class="scenario-card best">
+									<div class="scenario-title">⚡ Accelerated Payment (One Extra Month/Year)</div>
+									<h:panelGroup rendered="#{mortgagePayoffController.acceleratedScenario != null}">
+										<div class="scenario-stat">
+											<strong>Extra Monthly Payment:</strong> 
+											<span class="stat-value">R#{mortgagePayoffController.acceleratedScenario.additionalMonthlyPayment}</span>
+										</div>
+										<div class="scenario-stat">
+											<strong>New Payoff Term:</strong> 
+											<span class="stat-value">#{mortgagePayoffController.acceleratedScenario.monthsToPayoff} months</span>
+										</div>
+										<div class="scenario-stat">
+											<strong>Months Saved:</strong> 
+											<span class="months-saved">
+												#{mortgagePayoffController.standardPaymentScenario.monthsToPayoff - mortgagePayoffController.acceleratedScenario.monthsToPayoff} months
+											</span>
+										</div>
+										<div class="scenario-stat">
+											<strong>Interest Saved:</strong> 
+											<span class="interest-saved savings-highlight">R#{mortgagePayoffController.acceleratedScenario.interestSaved}</span>
+										</div>
+										<div class="scenario-stat">
+											<strong>Payoff Date:</strong> 
+											<span class="stat-value">#{mortgagePayoffController.acceleratedScenario.payoffDate}</span>
+										</div>
+										<h:commandButton value="View Payment Schedule" 
+											action="#{mortgagePayoffController.showPaymentSchedule(mortgagePayoffController.acceleratedScenario)}"
+											styleClass="btn btn-sm btn-success btn-schedule" immediate="true" />
+									</h:panelGroup>
+								</div>
+
+								<!-- Biweekly Payment -->
+								<div class="scenario-card">
+									<div class="scenario-title">📅 Biweekly Payment Plan</div>
+									<h:panelGroup rendered="#{mortgagePayoffController.biweeklyScenario != null}">
+										<div class="scenario-stat">
+											<strong>Biweekly Amount:</strong> 
+											<span class="stat-value">R#{mortgagePayoffController.biweeklyScenario.additionalMonthlyPayment}</span> extra/month
+										</div>
+										<div class="scenario-stat">
+											<strong>New Payoff Term:</strong> 
+											<span class="stat-value">#{mortgagePayoffController.biweeklyScenario.monthsToPayoff} months</span>
+										</div>
+										<div class="scenario-stat">
+											<strong>Months Saved:</strong> 
+											<span class="stat-value">#{mortgagePayoffController.standardPaymentScenario.monthsToPayoff - mortgagePayoffController.biweeklyScenario.monthsToPayoff}</span>
+										</div>
+										<div class="scenario-stat">
+											<strong>Interest Saved:</strong> 
+											<span class="savings-highlight">R#{mortgagePayoffController.biweeklyScenario.interestSaved}</span>
+										</div>
+										<h:commandButton value="View Payment Schedule" 
+											action="#{mortgagePayoffController.showPaymentSchedule(mortgagePayoffController.biweeklyScenario)}"
+											styleClass="btn btn-sm btn-secondary btn-schedule" immediate="true" />
+									</h:panelGroup>
+								</div>
+
+								<!-- Custom Extra Payment -->
+								<div class="scenario-card">
+									<div class="scenario-title">💡 Custom Extra Payment</div>
+									<div class="monthly-input-group">
+										<div class="form-group">
+											<h:outputLabel for="customPayment">Extra Monthly Payment (R):</h:outputLabel>
+											<div class="input-group">
+												<div class="input-group-prepend">
+													<span class="input-group-text">R</span>
+												</div>
+												<h:inputText id="customPayment" value="#{mortgagePayoffController.customExtraPayment}"
+													styleClass="form-control" type="number" step="10" min="0" 
+													placeholder="Enter amount (e.g., 500)" />
+											</div>
+										</div>
+										<h:commandButton value="Calculate" 
+											action="#{mortgagePayoffController.calculateCustomPayoff()}"
+											styleClass="btn btn-primary" immediate="true" />
+									</div>
+
+									<h:panelGroup rendered="#{mortgagePayoffController.customPaymentScenario != null}">
+										<div class="scenario-stat">
+											<strong>Extra Payment:</strong> 
+											<span class="stat-value">R#{mortgagePayoffController.customPaymentScenario.additionalMonthlyPayment}/month</span>
+										</div>
+										<div class="scenario-stat">
+											<strong>New Payoff Term:</strong> 
+											<span class="stat-value">#{mortgagePayoffController.customPaymentScenario.monthsToPayoff} months 
+												(#{mortgagePayoffController.customPaymentScenario.monthsToPayoff / 12} years)</span>
+										</div>
+										<div class="scenario-stat">
+											<strong>Months Saved:</strong> 
+											<span class="stat-value">#{mortgagePayoffController.standardPaymentScenario.monthsToPayoff - mortgagePayoffController.customPaymentScenario.monthsToPayoff} months</span>
+										</div>
+										<div class="scenario-stat">
+											<strong>Interest Saved:</strong> 
+											<span class="savings-highlight">R#{mortgagePayoffController.customPaymentScenario.interestSaved}</span>
+										</div>
+										<div class="scenario-stat">
+											<strong>Payoff Date:</strong> 
+											<span class="stat-value">#{mortgagePayoffController.customPaymentScenario.payoffDate}</span>
+										</div>
+										<h:commandButton value="View Payment Schedule" 
+											action="#{mortgagePayoffController.showPaymentSchedule(mortgagePayoffController.customPaymentScenario)}"
+											styleClass="btn btn-sm btn-primary btn-schedule" immediate="true" />
+									</h:panelGroup>
+								</div>
+
+								<!-- Target Payoff Date -->
+								<div class="scenario-card">
+									<div class="scenario-title">🎯 Pay Off By Target Year</div>
+									<div class="monthly-input-group">
+										<div class="form-group">
+											<h:outputLabel for="targetYears">Target Payoff in (years):</h:outputLabel>
+											<h:inputText id="targetYears" value="#{mortgagePayoffController.targetPayoffYears}"
+												styleClass="form-control" type="number" min="1" max="30" />
+										</div>
+										<h:commandButton value="Calculate Required Payment" 
+											action="#{mortgagePayoffController.calculateTargetDatePayoff()}"
+											styleClass="btn btn-primary" immediate="true" />
+									</div>
+
+									<h:panelGroup rendered="#{mortgagePayoffController.targetDateScenario != null}">
+										<div class="scenario-stat">
+											<strong>Extra Payment Needed:</strong> 
+											<span class="stat-value">R#{mortgagePayoffController.targetDateScenario.additionalMonthlyPayment}/month</span>
+										</div>
+										<div class="scenario-stat">
+											<strong>New Monthly Payment Total:</strong> 
+											<span class="stat-value">R#{mortgagePayoffController.selectedLoan.monthlyPayment + mortgagePayoffController.targetDateScenario.additionalMonthlyPayment}</span>
+										</div>
+										<div class="scenario-stat">
+											<strong>Payoff Date:</strong> 
+											<span class="stat-value">#{mortgagePayoffController.targetDateScenario.payoffDate}</span>
+										</div>
+										<div class="scenario-stat">
+											<strong>Interest Saved:</strong> 
+											<span class="savings-highlight">R#{mortgagePayoffController.targetDateScenario.interestSaved}</span>
+										</div>
+										<h:commandButton value="View Payment Schedule" 
+											action="#{mortgagePayoffController.showPaymentSchedule(mortgagePayoffController.targetDateScenario)}"
+											styleClass="btn btn-sm btn-primary btn-schedule" immediate="true" />
+									</h:panelGroup>
+								</div>
+							</div>
+						</div>
+
+						<!-- Payment Schedule Table -->
+						<h:panelGroup rendered="#{mortgagePayoffController.showPaymentSchedule}">
+							<div class="card mb-4">
+								<div class="card-header bg-dark text-white">
+									<h4 class="mb-0">Payment Schedule (First 60 Months)</h4>
+								</div>
+								<div class="card-body">
+									<div class="table-responsive">
+										<h:dataTable value="#{mortgagePayoffController.selectedPaymentSchedule}" var="payment"
+											styleClass="table table-striped table-hover table-sm comparison-table" 
+											rendered="#{mortgagePayoffController.selectedPaymentSchedule != null}"
+											border="1" cellpadding="5">
+											<h:column>
+												<f:facet name="header">Month</f:facet>
+												<h:outputText value="#{payment.monthNumber}" />
+											</h:column>
+											<h:column>
+												<f:facet name="header">Date</f:facet>
+												<h:outputText value="#{payment.paymentDate}" />
+											</h:column>
+											<h:column>
+												<f:facet name="header">Principal</f:facet>
+												<h:outputText value="R#{payment.principalPayment}" />
+											</h:column>
+											<h:column>
+												<f:facet name="header">Interest</f:facet>
+												<h:outputText value="R#{payment.interestPayment}" />
+											</h:column>
+											<h:column>
+												<f:facet name="header">Total Payment</f:facet>
+												<h:outputText value="R#{payment.totalPayment}" />
+											</h:column>
+											<h:column>
+												<f:facet name="header">Balance</f:facet>
+												<h:outputText value="R#{payment.balanceAfterPayment}" />
+											</h:column>
+										</h:dataTable>
+									</div>
+									<h:commandButton value="Close Schedule" 
+										action="#{mortgagePayoffController.hidePaymentSchedule()}"
+										styleClass="btn btn-secondary mt-3" immediate="true" />
+								</div>
+							</div>
+						</h:panelGroup>
+
+						<!-- Quick Comparison Summary -->
+						<div class="payoff-summary">
+							<h3>💰 Quick Comparison Summary</h3>
+							<table class="table table-sm">
+								<thead class="thead-light">
+									<tr>
+										<th>Scenario</th>
+										<th>Extra Payment</th>
+										<th>Payoff Months</th>
+										<th>Total Interest</th>
+										<th>Interest Saved</th>
+									</tr>
+								</thead>
+								<tbody>
+									<h:dataTable value="#{mortgagePayoffController.comparisonScenarios}" var="scenario"
+										rendered="#{mortgagePayoffController.comparisonScenarios != null}">
+										<h:column>
+											<tr>
+												<td>
+													<h:outputText value="Scenario" />
+												</td>
+												<td>
+													<h:outputText value="R#{scenario.additionalMonthlyPayment}" />
+												</td>
+												<td>
+													<h:outputText value="#{scenario.monthsToPayoff}" />
+												</td>
+												<td>
+													<h:outputText value="R#{scenario.totalInterestPaid}" />
+												</td>
+												<td class="savings-highlight">
+													<h:outputText value="R#{scenario.interestSaved}" />
+												</td>
+											</tr>
+										</h:column>
+									</h:dataTable>
+								</tbody>
+							</table>
+						</div>
+					</h:panelGroup>
+
+					<!-- No Loan Selected Message -->
+					<h:panelGroup rendered="#{mortgagePayoffController.selectedLoan == null}">
+						<div class="alert alert-info">
+							<h4>Select a Loan to Begin</h4>
+							<p>Choose a mortgage loan from the dropdown above to see payoff acceleration scenarios and interest savings.</p>
+						</div>
+					</h:panelGroup>
+				</h:form>
+			</div>
+		</div>
+	</f:view>
+
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/bootstrap/js/bootstrap.min.js"></script>
+</body>
+</html>

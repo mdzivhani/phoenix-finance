@@ -10,4 +10,11 @@ import com.phoenix.finance.entity.investment.Investment;
 public interface InvestorService {
 
 	void addInvestor(Investor investor, Investment firstInvestment, PropertyBond propertyBond);
+	
+	/**
+	 * Find an investor by their investor number.
+	 * @param investorNumber the investor number
+	 * @return the Investor if found, null otherwise
+	 */
+	Investor getInvestorByNumber(int investorNumber);
 }

@@ -18,7 +18,7 @@ import com.phoenix.finance.service.InvestmentService;
 
 @Controller
 @ApplicationScoped
-public class InvestmentController implements com.phoenix.finance.web.Controller {
+public class InvestmentController {
 
 	@Inject
 	private InvestmentService investmentService;
