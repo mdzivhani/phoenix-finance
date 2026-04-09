@@ -3,7 +3,7 @@
 <%@page import="com.phoenix.finance.util.MoneyFormatter"%>
 <%@page
 	import="com.phoenix.finance.entity.investment.InvestmentForecast"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="c" uri="jakarta.tags.core"%>
 <jsp:include page="includes/header.jsp"></jsp:include>
 <jsp:include page="includes/navigation.jsp"></jsp:include>
 

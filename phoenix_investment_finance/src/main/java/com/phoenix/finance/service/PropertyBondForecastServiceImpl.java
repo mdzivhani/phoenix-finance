@@ -5,8 +5,8 @@ import java.math.MathContext;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.ejb.Stateless;
-import javax.enterprise.context.Dependent;
+import jakarta.ejb.Stateless;
+import jakarta.enterprise.context.Dependent;
 
 import com.phoenix.finance.entity.Event;
 import com.phoenix.finance.entity.ForecastItem;

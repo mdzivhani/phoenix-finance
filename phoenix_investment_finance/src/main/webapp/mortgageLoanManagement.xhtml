@@ -1,14 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="f" uri="jakarta.faces.core"%>
-<%@ taglib prefix="h" uri="jakarta.faces.html"%>
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html" xmlns:f="jakarta.faces.core">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>Mortgage Loan Management</title>
-	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/bootstrap/css/bootstrap.min.css">
-	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style.css">
+	<link rel="stylesheet" href="#{request.contextPath}/resources/bootstrap/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="#{request.contextPath}/resources/css/style.css" />
 	<style>
 		.loan-card {
 			border-left: 4px solid #007bff;
@@ -38,8 +35,7 @@
 	</style>
 </head>
 <body>
-	<f:view>
-		<div class="container-fluid mt-5">
+<div class="container-fluid mt-5">
 			<div class="page-header">
 				<div class="container">
 					<h1 class="mb-0">Mortgage Loan Management</h1>
@@ -88,7 +84,7 @@
 							</div>
 
 							<h3 class="mt-4 mb-3">Mortage Loans</h3>
-							<h:panelGroup rendered="#{mortgageLoanController.investorLoans != null && mortgageLoanController.investorLoans.size() > 0}">
+							<h:panelGroup rendered="#{mortgageLoanController.investorLoans != null &amp;&amp; mortgageLoanController.investorLoans.size() > 0}">
 								<h:dataTable value="#{mortgageLoanController.investorLoans}" var="loan"
 									styleClass="table table-striped table-hover" border="1" cellpadding="10">
 									<h:column>
@@ -150,7 +146,7 @@
 								</div>
 							</div>
 
-							<h:panelGroup rendered="#{mortgageLoanController.currentLoan != null && mortgageLoanController.currentLoan.loanId != null}">
+							<h:panelGroup rendered="#{mortgageLoanController.currentLoan != null &amp;&amp; mortgageLoanController.currentLoan.loanId != null}">
 								<div class="card mt-4">
 									<div class="card-header bg-primary text-white">
 										<h4 class="mb-0">Loan Details: #{mortgageLoanController.currentLoan.accountNumber}</h4>
@@ -236,9 +232,9 @@
 				</div>
 			</div>
 		</div>
-	</f:view>
-
-	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-	<script src="${pageContext.request.contextPath}/resources/bootstrap/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+	<script src="#{request.contextPath}/resources/bootstrap/js/bootstrap.min.js"></script>
 </body>
 </html>
+
+

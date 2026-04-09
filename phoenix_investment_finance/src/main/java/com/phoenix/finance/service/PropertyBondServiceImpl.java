@@ -1,11 +1,11 @@
 package com.phoenix.finance.service;
 
-import javax.enterprise.context.Dependent;
+import jakarta.enterprise.context.Dependent;
 
 import java.util.List;
 
-import javax.ejb.Stateless;
-import javax.inject.Inject;
+import jakarta.ejb.Stateless;
+import jakarta.inject.Inject;
 
 import com.phoenix.finance.entity.bond.PropertyBond;
 import com.phoenix.finance.resource.InvestorResource;

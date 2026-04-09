@@ -24,12 +24,12 @@
       			</a>
   			</li>
   			<li>
-      			<a href="<%=request.getContextPath()%>/WEB-INF/view/mortgageLoanManagement.jsp">
+      			<a href="<%=request.getContextPath()%>/mortgageLoanManagement.xhtml">
       				Mortgage Loans
       			</a>
    			</li>
    			<li>
-      			<a href="<%=request.getContextPath()%>/WEB-INF/view/mortgagePayoffAccelerator.jsp">
+      			<a href="<%=request.getContextPath()%>/mortgagePayoffAccelerator.xhtml">
       				💰 Payoff Accelerator
       			</a>
    			</li>
