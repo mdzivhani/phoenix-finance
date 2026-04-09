@@ -266,7 +266,10 @@
 						<artifactId>maven-surefire-plugin</artifactId>
 						<version>${version.surefire.plugin}</version>
 						<configuration>
-							<skip>true</skip>
+							<!-- Exclude Arquillian integration tests from unit test run -->
+							<excludes>
+								<exclude>**/*IT.java</exclude>
+							</excludes>
 						</configuration>
 					</plugin>
 				</plugins>
