@@ -2,15 +2,21 @@ package com.phoenix.finance.entity;
 
 import static org.junit.Assert.assertEquals;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.phoenix.finance.entity.Investor;
 
+/**
+ * Integration test requiring WildFly container + PostgreSQL datasource.
+ * Run via: mvn clean test -Parq-wildfly-managed
+ */
+@Ignore("Requires WildFly container with phoenixPersistence JTA datasource. Run with: mvn clean test -Parq-wildfly-managed")
 public class InvestorTest {
 
   private EntityManagerFactory entityFactory;

@@ -2,7 +2,7 @@
 <%@page import="com.phoenix.finance.entity.bond.PropertyBond"%>
 <%@page import="com.phoenix.finance.entity.investment.Investment"%>
 <%@page import="com.phoenix.finance.util.MoneyFormatter"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="c" uri="jakarta.tags.core"%>
 <jsp:include page="includes/header.jsp"></jsp:include>
 <jsp:include page="includes/navigation.jsp"></jsp:include>
 

@@ -1,14 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="f" uri="jakarta.faces.core"%>
-<%@ taglib prefix="h" uri="jakarta.faces.html"%>
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html" xmlns:f="jakarta.faces.core">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Mortgage Loan Acceleration & Payoff Calculator</title>
-	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/bootstrap/css/bootstrap.min.css">
-	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style.css">
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Mortgage Loan Acceleration &amp; Payoff Calculator</title>
+	<link rel="stylesheet" href="#{request.contextPath}/resources/bootstrap/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="#{request.contextPath}/resources/css/style.css" />
 	<style>
 		.page-header {
 			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -109,8 +106,7 @@
 	</style>
 </head>
 <body>
-	<f:view>
-		<div class="container-fluid mt-5">
+<div class="container-fluid mt-5">
 			<div class="page-header">
 				<div class="container">
 					<h1 class="mb-0">💰 Mortgage Loan Acceleration Calculator</h1>
@@ -135,7 +131,7 @@
 										itemLabel="#{loan.accountNumber} (R#{loan.currentBalance})" itemValue="#{loan.loanId}" />
 								</h:selectOneMenu>
 							</div>
-							<h:commandButton value="Load Loan & Calculate Payoff Scenarios" 
+							<h:commandButton value="Load Loan &amp; Calculate Payoff Scenarios" 
 								action="#{mortgagePayoffController.loadLoan()}"
 								styleClass="btn btn-primary btn-lg" />
 						</div>
@@ -472,9 +468,9 @@
 				</h:form>
 			</div>
 		</div>
-	</f:view>
-
-	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-	<script src="${pageContext.request.contextPath}/resources/bootstrap/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+	<script src="#{request.contextPath}/resources/bootstrap/js/bootstrap.min.js"></script>
 </body>
 </html>
+
+

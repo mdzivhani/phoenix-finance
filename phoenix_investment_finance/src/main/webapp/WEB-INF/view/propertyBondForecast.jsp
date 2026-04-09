@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="jakarta.tags.core" prefix="c"%>
 <%@ page import="com.phoenix.finance.entity.bond.PropertyBond"%>
 <%@ page import="com.phoenix.finance.entity.bond.PropertyBondForecast"%>
 <%@ page import="com.phoenix.finance.entity.ForecastItem"%>

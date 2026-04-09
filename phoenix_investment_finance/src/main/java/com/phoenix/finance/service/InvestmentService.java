@@ -2,7 +2,7 @@ package com.phoenix.finance.service;
 
 import java.util.List;
 
-import javax.ejb.Local;
+import jakarta.ejb.Local;
 
 import com.phoenix.finance.entity.investment.Investment;
 

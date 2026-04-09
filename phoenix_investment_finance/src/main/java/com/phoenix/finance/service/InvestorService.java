@@ -1,6 +1,6 @@
 package com.phoenix.finance.service;
 
-import javax.ejb.Local;
+import jakarta.ejb.Local;
 
 import com.phoenix.finance.entity.Investor;
 import com.phoenix.finance.entity.bond.PropertyBond;

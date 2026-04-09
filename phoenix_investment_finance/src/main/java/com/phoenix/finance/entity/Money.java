@@ -3,7 +3,7 @@ package com.phoenix.finance.entity;
 import java.math.BigDecimal;
 import java.math.MathContext;
 
-import javax.persistence.Embeddable;
+import jakarta.persistence.Embeddable;
 
 @Embeddable
 public class Money {
