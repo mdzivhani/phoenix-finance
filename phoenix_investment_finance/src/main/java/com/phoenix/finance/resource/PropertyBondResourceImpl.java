@@ -2,8 +2,8 @@ package com.phoenix.finance.resource;
 
 import java.util.List;
 
-import javax.enterprise.context.RequestScoped;
-import javax.persistence.Query;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.persistence.Query;
 
 import com.phoenix.finance.entity.bond.PropertyBond;
 import com.phoenix.finance.qualifier.Resource;

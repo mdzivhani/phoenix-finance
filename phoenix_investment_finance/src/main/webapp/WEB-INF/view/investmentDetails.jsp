@@ -3,7 +3,7 @@
 	import="java.util.List, java.math.BigDecimal"%>
 <%@page import="com.phoenix.finance.entity.investment.*"%>
 <%@page import="com.phoenix.finance.entity.*"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="c" uri="jakarta.tags.core"%>
 <%
   InvestmentForecast forecast = (InvestmentForecast) request.getAttribute("forecast");
   List<ForecastItem> monthEndBalances = forecast.getForecastItems();

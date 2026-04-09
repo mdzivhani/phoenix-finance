@@ -2,9 +2,9 @@ package com.phoenix.finance.service;
 
 import java.util.List;
 
-import javax.ejb.Stateless;
-import javax.enterprise.context.Dependent;
-import javax.inject.Inject;
+import jakarta.ejb.Stateless;
+import jakarta.enterprise.context.Dependent;
+import jakarta.inject.Inject;
 
 import com.phoenix.finance.entity.Investor;
 import com.phoenix.finance.entity.investment.Investment;

@@ -1,5 +1,5 @@
 <%@page import="com.phoenix.finance.entity.Investor"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="c" uri="jakarta.tags.core"%>
 <%
 	String message = request.getAttribute("message").toString();
 %>
